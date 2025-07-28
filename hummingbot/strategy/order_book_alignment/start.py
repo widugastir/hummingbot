@@ -20,7 +20,7 @@ def start(self):
 
         market_names: List[Tuple[str, List[str]]] = [(connector, [trading_pair])]
 
-        self._initialize_markets(market_names)
+        self.initialize_markets(market_names)
         self.market_trading_pair_tuples = []
         base, quote = trading_pair.split("-")
         market_info = MarketTradingPairTuple(self.markets[connector], trading_pair, base, quote)
