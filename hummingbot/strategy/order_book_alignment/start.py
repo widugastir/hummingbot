@@ -1,12 +1,8 @@
 from hummingbot.strategy.market_trading_pair_tuple import MarketTradingPairTuple
 from hummingbot.strategy.order_book_alignment import OrderBookAlignment
-from hummingbot.strategy.order_book_alignment.order_book_alignment_config_map import \
-    order_book_alignment_config_map as c_map
+from hummingbot.strategy.order_book_alignment.order_book_alignment_config_map import order_book_alignment_config_map as c_map
 
-from typing import (
-    List,
-    Tuple,
-)
+from typing import List, Tuple
 
 def start(self):
     try:
@@ -22,28 +18,24 @@ def start(self):
         spread = c_map.get("spread").value
         is_buy = trade_side == "buy"
 
-        try:
-            assets: Tuple[str, str] = self._initialize_market_assets(connector, [trading_pair])[0]
-        except ValueError as e:
-            self.notify(str(e))
-            return
-
         market_names: List[Tuple[str, List[str]]] = [(connector, [trading_pair])]
 
         self._initialize_markets(market_names)
-        market_info = [self.markets[connector], trading_pair] + list(assets)
-        self.market_trading_pair_tuples = [MarketTradingPairTuple(*market_info)]
+        self.market_trading_pair_tuples = []
+        base, quote = trading_pair.split("-")
+        market_info = MarketTradingPairTuple(self.markets[connector], trading_pair, base, quote)
+        self.market_trading_pair_tuples.append(market_info)
         
         self.strategy = OrderBookAlignment(
-            MarketTradingPairTuple(*market_info),
-            target_asset_amount,
-            asset_amount_per_trade,
-            price_limit,
-            spread,
-            is_buy,
-            price_limit_retry_duration,
-            order_refresh_time,
-            place_after_fill_order_delay
+            market_info=MarketTradingPairTuple(*market_info),
+            target_asset_amount=target_asset_amount,
+            asset_amount_per_trade=asset_amount_per_trade,
+            price_limit=price_limit,
+            spread=spread,
+            is_buy=is_buy,
+            price_limit_retry_duration=price_limit_retry_duration,
+            order_refresh_time=order_refresh_time,
+            place_after_fill_order_delay=place_after_fill_order_delay
         )
 
     except Exception as e:
