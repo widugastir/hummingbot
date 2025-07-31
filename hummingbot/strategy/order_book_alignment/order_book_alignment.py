@@ -168,8 +168,8 @@ class OrderBookAlignment(StrategyPyBase):
                 self._last_price = quantized_price
                 self._quantity_remaining = Decimal(self._quantity_remaining) - quantized_amount
                 self._active_orders[order_id] = {"status": LimitOrderStatus.OPEN, "asset_amount": quantized_amount}
-                self.logger().info(
-                    f"========={quantized_amount}  Create limit order: {order_id}   Base price: {base_price}   Order price: {quantized_price}")
+                self.logger().info(f"========={quantized_amount}  Create limit order: {order_id}   Base price: {base_price}   Order price: {quantized_price}")
+
             else:
                 self.logger().info("Not enough balance to place the order. Please check balance.")
         else:
