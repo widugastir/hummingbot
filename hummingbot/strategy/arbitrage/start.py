@@ -22,9 +22,14 @@ def start(self):
     try:
         primary_trading_pair: str = raw_primary_trading_pair
         secondary_trading_pair: str = raw_secondary_trading_pair
-        primary_assets: Tuple[str, str] = self._initialize_market_assets(primary_market, [primary_trading_pair])[0]
-        secondary_assets: Tuple[str, str] = self._initialize_market_assets(secondary_market,
-                                                                           [secondary_trading_pair])[0]
+
+        primary_base, primary_quote = primary_trading_pair.split("-")
+        secondary_base, secondary_quote = secondary_trading_pair.split("-")
+        primary_assets = MarketTradingPairTuple(self.markets[primary_market], primary_trading_pair, primary_base, primary_quote)
+        secondary_assets = MarketTradingPairTuple(self.markets[secondary_market], secondary_trading_pair, secondary_base, secondary_quote)
+
+        # primary_assets: Tuple[str, str] = self._initialize_market_assets(primary_market, [primary_trading_pair])[0]
+        # secondary_assets: Tuple[str, str] = self._initialize_market_assets(secondary_market, [secondary_trading_pair])[0]
     except ValueError as e:
         self.notify(str(e))
         return
