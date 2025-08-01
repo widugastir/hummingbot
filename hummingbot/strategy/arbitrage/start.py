@@ -25,8 +25,8 @@ def start(self):
 
         primary_base, primary_quote = primary_trading_pair.split("-")
         secondary_base, secondary_quote = secondary_trading_pair.split("-")
-        primary_assets = MarketTradingPairTuple(self.markets[primary_market], primary_trading_pair, primary_base, primary_quote)
-        secondary_assets = MarketTradingPairTuple(self.markets[secondary_market], secondary_trading_pair, secondary_base, secondary_quote)
+        primary_data = MarketTradingPairTuple(self.markets[primary_market], primary_trading_pair, primary_base, primary_quote)
+        secondary_data = MarketTradingPairTuple(self.markets[secondary_market], secondary_trading_pair, secondary_base, secondary_quote)
 
         # primary_assets: Tuple[str, str] = self._initialize_market_assets(primary_market, [primary_trading_pair])[0]
         # secondary_assets: Tuple[str, str] = self._initialize_market_assets(secondary_market, [secondary_trading_pair])[0]
@@ -38,9 +38,9 @@ def start(self):
                                                  (secondary_market, [secondary_trading_pair])]
     self._initialize_markets(market_names)
 
-    primary_data = [self.markets[primary_market], primary_trading_pair] + list(primary_assets)
-    secondary_data = [self.markets[secondary_market], secondary_trading_pair] + list(secondary_assets)
-    self.market_trading_pair_tuples = [MarketTradingPairTuple(*primary_data), MarketTradingPairTuple(*secondary_data)]
+    # primary_data = [self.markets[primary_market], primary_trading_pair] + list(primary_assets)
+    # secondary_data = [self.markets[secondary_market], secondary_trading_pair] + list(secondary_assets)
+    self.market_trading_pair_tuples = [primary_data, secondary_data]
     self.market_pair = ArbitrageMarketPair(*self.market_trading_pair_tuples)
     self.strategy = ArbitrageStrategy()
     self.strategy.init_params(market_pairs=[self.market_pair],
