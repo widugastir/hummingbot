@@ -431,6 +431,9 @@ cdef class ArbitrageStrategy(StrategyBase):
         :type buy_market_trading_pair_tuple: MarketTradingPairTuple
         :type sell_market_trading_pair_tuple: MarketTradingPairTuple
         """
+
+        self.logger().info(f"Call: c_process_market_pair_inner()")
+
         cdef:
             object quantized_buy_amount
             object quantized_sell_amount
@@ -448,6 +451,8 @@ cdef class ArbitrageStrategy(StrategyBase):
         quantized_order_amount = min(quantized_buy_amount, quantized_sell_amount)
         
         volume_in_USD = quantized_order_amount * sell_price
+
+        self.logger().info(f"volume_in_USD: ${volume_in_USD} < 10?")
         
         #filtering min order amount below $1.1   
         if volume_in_USD < 10:
@@ -459,6 +464,7 @@ cdef class ArbitrageStrategy(StrategyBase):
             #                        f"volume_in_USD: {volume_in_USD}", )
             
         if quantized_order_amount:
+            self.logger().info(f"after quantized_order_amount.")
             if self._logging_options & self.OPTION_LOG_CREATE_ORDER:
                 self.log_with_clock(logging.INFO,
                                     f"Executing limit order buy of {buy_market_trading_pair_tuple.trading_pair} "
